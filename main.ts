@@ -1,24 +1,25 @@
 namespace SpriteKind {
     export const gun = SpriteKind.create()
 }
-function ProjectFuntion (num: number, mySprite: Sprite, myImage: Image) {
-    mySprite.setKind(num)
-    mySprite.y = randint(10, 150)
+function CooLwords (text: string) {
+    Hooman.sayText(text, 500, false)
 }
 statusbars.onZero(StatusBarKind.Health, function (status) {
     game.over(false, effects.melt)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    statusbar.value += 6
-    foodhealth.destroy(effects.hearts, 500)
+    statusbar.value = 0
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     scene.cameraShake(4, 500)
     statusbar.value += -3
+    ExtraVar = randint(0, 10)
+    if (ExtraVar < 1) {
+        CooLwords("Ouch!")
+    }
 })
 let Zooombie: Sprite = null
-let foodhealth: Sprite = null
+let ExtraVar = 0
 let statusbar: StatusBarSprite = null
+let Hooman: Sprite = null
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999111111111119999999999999999999999999999999999999991111999999999999999999999999999999999999999999111111111111
@@ -141,7 +142,7 @@ scene.setBackgroundImage(img`
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbccbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     `)
-let Hooman = sprites.create(img`
+Hooman = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
@@ -165,50 +166,25 @@ info.setScore(0)
 statusbar.attachToSprite(Hooman)
 controller.moveSprite(Hooman, 40, 40)
 Hooman.setStayInScreen(true)
-game.onUpdateInterval(5000, function () {
-    foodhealth = sprites.createProjectileFromSide(img`
-        . . . . . . . . . . . 6 6 6 6 6 
-        . . . . . . . . . 6 6 7 7 7 7 8 
-        . . . . . . 8 8 8 7 7 8 8 6 8 8 
-        . . e e e e c 6 6 8 8 . 8 7 8 . 
-        . e 2 5 4 2 e c 8 . . . 6 7 8 . 
-        e 2 4 2 2 2 2 2 c . . . 6 7 8 . 
-        e 2 2 2 2 2 2 2 c . . . 8 6 8 . 
-        e 2 e e 2 2 2 2 e e e e c 6 8 . 
-        c 2 e e 2 2 2 2 e 2 5 4 2 c 8 . 
-        . c 2 e e e 2 e 2 4 2 2 2 2 c . 
-        . . c 2 2 2 e e 2 2 2 2 2 2 2 e 
-        . . . e c c e c 2 2 2 2 2 2 2 e 
-        . . . . . . . c 2 e e 2 2 e 2 c 
-        . . . . . . . c e e e e e e 2 c 
-        . . . . . . . . c e 2 2 2 2 c . 
-        . . . . . . . . . c c c c c . . 
-        `, -25, 0)
-    foodhealth.setKind(SpriteKind.Food)
-    foodhealth.y = randint(10, 150)
-})
 game.onUpdateInterval(1000, function () {
     Zooombie = sprites.createProjectileFromSide(img`
-        . . . . f 7 7 7 7 7 7 f f . . . 
-        . . . f f 7 1 1 7 7 1 1 f . . . 
-        . . . f 7 7 1 f 7 7 f 1 f . . . 
-        . . . f 7 7 7 7 7 7 7 7 f . . . 
-        . f f f f 7 7 f f f f 7 f f . . 
-        f f 1 1 1 1 7 7 7 7 7 7 1 f f . 
-        f 1 1 f f 1 1 7 7 7 7 1 1 1 f f 
-        f 7 f f f 1 1 1 1 1 1 1 1 1 7 f 
-        f 7 f . f 1 1 1 1 1 1 1 f 7 7 f 
-        f 7 f . f 1 1 1 1 1 1 1 f f 7 f 
-        f f f . f 8 8 8 8 8 8 8 f 7 7 f 
-        . . . f 8 8 8 8 8 8 8 8 f f f f 
-        . . . 8 8 8 8 f f 8 8 8 8 . . . 
-        . . f f 8 8 f . . f 8 8 f . . . 
-        . f f f f f . . . . f f f f . . 
-        f f f f f f . . . . f f f f f . 
+        . . . . . . b b b b . . . . . . 
+        . . . . . . b 4 4 4 b . . . . . 
+        . . . . . . b b 4 4 4 b . . . . 
+        . . . . . b 4 b b b 4 4 b . . . 
+        . . . . b d 5 5 5 4 b 4 4 b . . 
+        . . . . b 3 2 3 5 5 4 e 4 4 b . 
+        . . . b d 2 2 2 5 7 5 4 e 4 4 e 
+        . . . b 5 3 2 3 5 5 5 5 e e e e 
+        . . b d 7 5 5 5 3 2 3 5 5 e e e 
+        . . b 5 5 5 5 5 2 2 2 5 5 d e e 
+        . b 3 2 3 5 7 5 3 2 3 5 d d e 4 
+        . b 2 2 2 5 5 5 5 5 5 d d e 4 . 
+        b d 3 2 d 5 5 5 d d d 4 4 . . . 
+        b 5 5 5 5 d d 4 4 4 4 . . . . . 
+        4 d d d 4 4 4 . . . . . . . . . 
+        4 4 4 4 . . . . . . . . . . . . 
         `, -75, 0)
     Zooombie.setKind(SpriteKind.Enemy)
     Zooombie.y = randint(10, 150)
-})
-game.onUpdateInterval(20000, function () {
-	
 })
